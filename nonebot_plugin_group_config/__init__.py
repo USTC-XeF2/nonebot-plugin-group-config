@@ -1,4 +1,7 @@
+from nonebot import require
 from nonebot.plugin import PluginMetadata
+
+require("nonebot_plugin_uninfo")
 
 from .config import Config
 from .utils import get_group_config_dir, get_group_config_file, get_group_config, set_group_config, GLOBAL
