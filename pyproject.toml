@@ -1,10 +1,11 @@
 [project]
 name = "nonebot_plugin_group_config"
-version = "0.1.1"
+version = "0.1.2"
 description = "Nonebot2 群聊配置信息存储与管理插件"
 readme = "README.md"
 dependencies = [
     "nonebot2>=2.3.0",
+    "nonebot-plugin-localstore>=0.7.0",
     "nonebot-plugin-uninfo>=0.6.0",
 ]
 requires-python = ">=3.9, <4.0"

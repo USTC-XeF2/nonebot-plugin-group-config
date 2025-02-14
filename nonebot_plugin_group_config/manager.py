@@ -1,4 +1,6 @@
-from .utils import get_caller_plugin_name, get_group_config_file, get_group_config, set_group_config, GLOBAL
+from nonebot_plugin_localstore import _try_get_caller_plugin
+
+from .utils import get_group_config_file, get_group_config, set_group_config, GLOBAL
 
 class GroupConfig:
     def __init__(self, group_id: str, manager: 'GroupConfigManager'):
@@ -31,6 +33,9 @@ class GroupConfig:
             set_group_config(self.group_id, full_config)
 
     def reset(self, key: str):
+        """
+        将配置项重置为默认值
+        """
         self[key] = self._m.default_config[key]
 
 class GroupConfigManager:
@@ -39,7 +44,7 @@ class GroupConfigManager:
     scope: str
     _configs: dict[str, GroupConfig]
     def __new__(cls, default_config: dict[str], scope: str = None):
-        scope = scope or get_caller_plugin_name()
+        scope = scope or _try_get_caller_plugin().name
         if scope not in cls._managers:
             instance = super().__new__(cls)
             instance.default_config = default_config
@@ -49,7 +54,17 @@ class GroupConfigManager:
         return cls._managers[scope]
 
     @classmethod
+    def get_manager(cls, scope: str):
+        """
+        获取指定作用域的配置管理器
+        """
+        return cls._managers[scope]
+
+    @classmethod
     def complete_config(cls, group_id: str):
+        """
+        创建/补全配置文件
+        """
         config = get_group_config(group_id)
         for manager in cls._managers.values():
             if manager.scope not in config:
@@ -67,6 +82,9 @@ class GroupConfigManager:
 
     @classmethod
     def generate_keys(cls):
+        """
+        生成用于指令的配置项键值对
+        """
         return {
             (i.scope + "." + j if i.scope != GLOBAL else j): (i.scope, j)
             for i in cls._managers.values()
