@@ -1,126 +1,100 @@
 <div align="center">
-  <a href="https://v2.nonebot.dev/store"><img src="https://github.com/A-kirami/nonebot-plugin-template/blob/resources/nbp_logo.png" width="180" height="180" alt="NoneBotPluginLogo"></a>
-  <br>
-  <p><img src="https://github.com/A-kirami/nonebot-plugin-template/blob/resources/NoneBotPlugin.svg" width="240" alt="NoneBotPluginText"></p>
+  <a href="https://nonebot.dev/"><img src="https://nonebot.dev/logo.png" width="180" height="180" alt="NoneBotLogo"></a>
 </div>
 
 <div align="center">
 
-# nonebot-plugin-template
+# nonebot-plugin-group-config
 
-_✨ NoneBot 插件简单描述 ✨_
+_✨ Nonebot2 群聊配置信息存储与管理插件 ✨_
 
 
 <a href="./LICENSE">
-    <img src="https://img.shields.io/github/license/owner/nonebot-plugin-template.svg" alt="license">
+    <img src="https://img.shields.io/github/license/USTC-XeF2/nonebot-plugin-group-config.svg" alt="license">
 </a>
-<a href="https://pypi.python.org/pypi/nonebot-plugin-template">
-    <img src="https://img.shields.io/pypi/v/nonebot-plugin-template.svg" alt="pypi">
+<a href="https://pypi.python.org/pypi/nonebot-plugin-group-config">
+    <img src="https://img.shields.io/pypi/v/nonebot-plugin-group-config.svg" alt="pypi">
 </a>
 <img src="https://img.shields.io/badge/python-3.9+-blue.svg" alt="python">
 
 </div>
 
-这是一个 nonebot2 插件项目的模板库, 你可以直接使用本模板创建你的 nonebot2 插件项目的仓库
-
-<details open>
-<summary>模板库使用方法</summary>
-
-1. 点击 [![start-course](https://user-images.githubusercontent.com/1221423/235727646-4a590299-ffe5-480d-8cd5-8194ea184546.svg)](https://github.com/new?template_owner=A-kirami&template_name=nonebot-plugin-template&owner=%40me&name=nonebot-plugin-&visibility=public) 创建仓库
-2. 在创建好的新仓库中, 在 "Add file" 菜单中选择 "Create new file", 在新文件名处输入`LICENSE`, 此时在右侧会出现一个 "Choose a license template" 按钮, 点击此按钮选择开源协议模板, 然后在最下方提交新文件到主分支
-3. 全局替换`owner`为仓库所有者ID; 全局替换`nonebot-plugin-template`为插件名; 全局替换`nonebot_plugin_template`为包名; 修改 python 徽标中的版本为你插件的运行所需版本
-4. 修改 README 中的插件名和插件描述, 并在下方填充相应的内容
-
-</details>
-
-> [!NOTE]
-> 模板库中自带了一个发布工作流, 你可以使用此工作流自动发布你的插件到 pypi
-
-<details>
-<summary>配置发布工作流</summary>
-
-1. 前往 https://pypi.org/manage/account/#api-tokens 并创建一个新的 API 令牌。创建成功后不要关闭页面，不然你将无法再次查看此令牌。
-2. 在单独的浏览器选项卡或窗口中，打开 [Actions secrets and variables](./settings/secrets/actions) 页面。你也可以在 Settings - Secrets and variables - Actions 中找到此页面。
-3. 点击 New repository secret 按钮，创建一个名为 `PYPI_API_TOKEN` 的新令牌，并从第一步复制粘贴令牌。
-
-</details>
-
-> [!IMPORTANT]
-> 这个发布工作流需要 pyproject.toml 文件, 并且只支持 [PEP 621](https://peps.python.org/pep-0621/) 标准的 pyproject.toml 文件
-
-<details>
-<summary>触发发布工作流</summary>
-从本地推送任意 tag 即可触发。
-
-创建 tag:
-
-    git tag <tag_name>
-
-推送本地所有 tag:
-
-    git push origin --tags
-
-</details>
-
 ## 📖 介绍
 
-这里是插件的详细介绍部分
+本插件以插件调用与指令控制的方式管理不同群聊的配置信息，支持配置信息的持久化存储。
 
 ## 💿 安装
 
-<details open>
-<summary>使用 nb-cli 安装</summary>
-在 nonebot2 项目的根目录下打开命令行, 输入以下指令即可安装
+- 使用 nb-cli 安装
 
-    nb plugin install nonebot-plugin-template
+```shell
+nb plugin install nonebot-plugin-group-config
+```
 
-</details>
+- 使用包管理器安装
 
-<details>
-<summary>使用包管理器安装</summary>
-在 nonebot2 项目的插件目录下, 打开命令行, 根据你使用的包管理器, 输入相应的安装命令
-
-<details>
-<summary>pip</summary>
-
-    pip install nonebot-plugin-template
-</details>
-<details>
-<summary>pdm</summary>
-
-    pdm add nonebot-plugin-template
-</details>
-<details>
-<summary>poetry</summary>
-
-    poetry add nonebot-plugin-template
-</details>
-<details>
-<summary>conda</summary>
-
-    conda install nonebot-plugin-template
-</details>
-
-打开 nonebot2 项目根目录下的 `pyproject.toml` 文件, 在 `[tool.nonebot]` 部分追加写入
-
-    plugins = ["nonebot_plugin_template"]
-
-</details>
+```shell
+pip install nonebot-plugin-group-config
+```
 
 ## ⚙️ 配置
 
-在 nonebot2 项目的`.env`文件中添加下表中的必填配置
-
 | 配置项 | 必填 | 默认值 | 说明 |
 |:-----:|:----:|:----:|:----:|
-| 配置项1 | 是 | 无 | 配置说明 |
-| 配置项2 | 否 | 无 | 配置说明 |
+| GROUP_CONFIG_PATH | 是 | 无 | 配置文件的存储文件夹 |
+| GROUP_CONFIG_FORMAT | 否 | group-{}.json | 配置文件的名称格式化模板 |
+| GROUP_CONFIG_ENABLE_COMMAND | 否 | true | 启用对话中的/config指令 |
 
 ## 🎉 使用
-### 指令表
-| 指令 | 权限 | 需要@ | 范围 | 说明 |
-|:-----:|:----:|:----:|:----:|:----:|
-| 指令1 | 主人 | 否 | 私聊 | 指令说明 |
-| 指令2 | 群员 | 是 | 群聊 | 指令说明 |
-### 效果图
-如果有效果图的话
+### 插件调用
+
+每个群聊有单独的配置文件，配置文件为二级字典，一级字段默认为调用的插件名称，二级字段为配置项。
+
+在使用其他插件时，可以通过`GroupConfigManager`类来管理配置信息。创建`GroupConfigManager`对象时，需要传入默认配置信息。
+
+```python
+from nonebot_plugin_group_config import GroupConfigManager, GLOBAL
+
+# 在插件中调用，默认使用插件名称作为一级字段
+config_manager1 = GroupConfigManager({
+  "key1": "value1",
+  "key2": 2
+})
+
+# 使用指定的一级字段
+config_manager2 = GroupConfigManager({
+  "key1": "value1",
+  "key2": 2
+}, "scope")
+
+# 使用全局字段，在配置文件中以`GLOBAL`为一级字段
+global_config_manager = GroupConfigManager({
+  "key1": "value1",
+  "key2": 2
+}, GLOBAL)
+```
+
+上文获取的配置管理器可以通过以群ID为键获取指定群聊对应的二级字段信息，返回 `GroupConfig` 对象。修改字段时不能添加新字段，对 `GroupConfig` 对象的操作会直接修改配置文件。
+
+```python
+group_config = config_manager1[group_id] # 此处的 group_id 为 str 类型
+
+print(group_config["key1"]) # value1
+group_config["key2"] = -1
+```
+
+注：获取 `GroupConfig` 对象时若对应的群聊配置信息文件不存在，会根据已注册的所有管理器的默认配置信息创建新的配置文件。也可以通过 `GroupConfigManager.complete_config` 方法手动创建/补全配置文件。
+
+### 指令调用
+
+管理员与超级用户可以在群聊中通过指令对群聊配置进行管理。
+
+使用 `/config` 指令查看当前群聊的所有可用配置字段，这些字段会以 `<一级字段>.<二级字段>` 的形式显示，但 `GLOBAL` 字段不会显示其一级字段。
+
+使用 `/config <一级字段>.<二级字段> <值>` 指令可以设置指定的配置字段，但不能创建不存在的字段，配置后的值与旧值类型相同。
+
+## TODO
+
+- [ ] 获取所有群聊配置信息的接口
+- [ ] 超级管理员私聊指令
+- [ ] 多级字段支持
