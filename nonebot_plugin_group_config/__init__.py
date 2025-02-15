@@ -1,11 +1,11 @@
 from nonebot import require
-from nonebot.plugin import PluginMetadata
+from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
 require("nonebot_plugin_localstore")
 require("nonebot_plugin_uninfo")
 
 from .config import Config
-from .utils import get_group_config_file, get_group_config, set_group_config, GLOBAL
+from .utils import group_config_dir, get_group_config_file, get_group_config, set_group_config, GLOBAL
 from .manager import GroupConfig, GroupConfigManager
 from .command import config_handler
 
@@ -16,5 +16,5 @@ __plugin_meta__ = PluginMetadata(
     type="library",
     homepage="https://github.com/USTC-XeF2/nonebot-plugin-group-config",
     config=Config,
-    supported_adapters=None,
+    supported_adapters=inherit_supported_adapters("nonebot_plugin_uninfo"),
 )

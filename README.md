@@ -44,6 +44,8 @@ pip install nonebot-plugin-group-config
 | GROUP_CONFIG_FORMAT | 否 | group-{}.json | 配置文件的名称格式化模板 |
 | GROUP_CONFIG_ENABLE_COMMAND | 否 | true | 启用对话中的/config指令 |
 
+本插件使用 localstore 插件进行存储，若需要修改群聊配置文件的存储路径，请参考 localstore 插件的说明更改 `LOCALSTORE_PLUGIN_CONFIG_DIR` 配置项。
+
 ## 🎉 使用
 ### 插件调用
 
@@ -54,7 +56,7 @@ pip install nonebot-plugin-group-config
 ```python
 from nonebot_plugin_group_config import GroupConfigManager, GLOBAL
 
-# 默认使用插件名称作为作用域
+# 默认使用去除 nonebot_plugin_ 前缀的插件名称作为作用域
 config_manager1 = GroupConfigManager({
   "key1": "value1",
   "key2": 2

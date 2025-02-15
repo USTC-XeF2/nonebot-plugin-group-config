@@ -1,6 +1,4 @@
-from nonebot_plugin_localstore import _try_get_caller_plugin
-
-from .utils import get_group_config_file, get_group_config, set_group_config, GLOBAL
+from .utils import get_caller_plugin_name, get_group_config_file, get_group_config, set_group_config, GLOBAL
 
 class GroupConfig:
     def __init__(self, group_id: str, manager: 'GroupConfigManager'):
@@ -44,7 +42,7 @@ class GroupConfigManager:
     scope: str
     _configs: dict[str, GroupConfig]
     def __new__(cls, default_config: dict[str], scope: str = None):
-        scope = scope or _try_get_caller_plugin().name
+        scope = scope or get_caller_plugin_name()
         if scope not in cls._managers:
             instance = super().__new__(cls)
             instance.default_config = default_config
