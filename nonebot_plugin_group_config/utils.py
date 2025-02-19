@@ -1,6 +1,8 @@
 import json
 import inspect
 from functools import lru_cache
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 from nonebot import get_plugin_config
 from nonebot.plugin import get_plugin_by_module_name
@@ -35,19 +37,32 @@ def get_caller_plugin_name():
 def get_group_config_file(group_id: str):
     return group_config_dir / plugin_config.group_config_format.format(group_id)
 
-def get_group_config(group_id: str) -> dict[str, dict[str]]:
-    config_file = get_group_config_file(group_id)
-    if not config_file.exists():
-        return {}
+class ConfigFileWatcher(FileSystemEventHandler):
+    config: dict[str, dict[str]]
+    def __init__(self, group_id: str):
+        self.group_id = group_id
+        self.on_modified(None)
+        self._observer = Observer()
+        self._observer.schedule(self, get_group_config_file(group_id))
+        self._observer.start()
 
-    with config_file.open() as rf:
-        return json.load(rf)
+    def __del__(self):
+        self._observer.stop()
+        self._observer.join()
 
-def set_group_config(group_id: str, config: dict[str, dict[str]]):
-    with get_group_config_file(group_id).open("w") as wf:
-        json.dump(config, wf, indent=4)
+    def on_modified(self, _):
+        config_file = get_group_config_file(self.group_id)
+        if not config_file.exists():
+            self.config = {}
 
-async def is_command_enabled() -> bool:
-    return plugin_config.group_config_enable_command
+        with config_file.open() as rf:
+            self.config = json.load(rf)
+
+    def save(self):
+        with get_group_config_file(self.group_id).open("w") as wf:
+            json.dump(self.config, wf, indent=4)
+
+def is_command_enabled():
+    return plugin_config.group_config_enable_command is not False
 
 GLOBAL = "GLOBAL"

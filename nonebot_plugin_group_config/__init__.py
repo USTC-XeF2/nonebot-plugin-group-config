@@ -5,7 +5,7 @@ require("nonebot_plugin_localstore")
 require("nonebot_plugin_uninfo")
 
 from .config import Config
-from .utils import group_config_dir, get_group_config_file, get_group_config, set_group_config, GLOBAL
+from .utils import group_config_dir, get_group_config_file, GLOBAL
 from .manager import GroupConfig, GroupConfigManager
 from .command import config_handler
 
