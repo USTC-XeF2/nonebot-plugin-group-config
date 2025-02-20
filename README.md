@@ -57,13 +57,13 @@ pip install nonebot-plugin-group-config
 from nonebot_plugin_group_config import GroupConfigManager, GLOBAL
 
 # 默认使用去除 nonebot_plugin_ 前缀的插件名称作为作用域
-config_manager1 = GroupConfigManager({
+config_manager = GroupConfigManager({
   "key1": "value1",
   "key2": 2
 })
 
 # 使用自定义作用域
-config_manager2 = GroupConfigManager({
+custom_config_manager = GroupConfigManager({
   "key1": "value1",
   "key2": 2
 }, "my_scope")
@@ -77,16 +77,28 @@ global_config_manager = GroupConfigManager({
 
 同一作用域的配置管理器只能声明一次。可以通过 `GroupConfigManager.get_manager` 方法获取已注册的配置管理器，若不存在则返回 `None`。
 
-配置管理器可以通过 `get_group_config` 方法获取指定群聊的 `GroupConfig` 对象，其中包含该作用域下的全部配置项。
+配置管理器可以通过 `get_group_config` 方法获取指定群聊的 `GroupConfig` 对象，其中包含该作用域下的全部配置项。该对象的配置值与配置文件同步，对 `GroupConfig` 对象的操作会直接修改配置文件。
 
 ```python
-group_config = config_manager1.get_group_config(group_id)
+group_config = config_manager.get_group_config(group_id)
 
 print(group_config["key1"]) # 输出：value1
 group_config["key2"] = -1 # 只能修改已存在的配置项
 ```
 
-注：获取 `GroupConfig` 对象时若对应的群聊配置信息文件不存在，会根据已注册的所有管理器的默认配置信息创建新的配置文件，对 `GroupConfig` 对象的操作会直接修改配置文件。
+在事件处理中调用时，也可以通过依赖注入获取 `GroupConfig` 对象，若事件非群聊类型则不会触发。
+
+```python
+from nonebot_plugin_group_config import GroupConfig, GetGroupConfig
+
+handler = on(...) # 事件处理器
+
+@handler.handle()
+async def _(group_config: GroupConfig = GetGroupConfig(config_manager)):
+  ...
+```
+
+注：获取 `GroupConfig` 对象时若对应的群聊配置信息文件不存在，会根据已注册的所有管理器的默认配置信息创建新的配置文件。
 
 ### 指令调用
 

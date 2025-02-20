@@ -6,8 +6,8 @@ require("nonebot_plugin_uninfo")
 
 from .config import Config
 from .utils import group_config_dir, get_group_config_file, GLOBAL
-from .manager import GroupConfig, GroupConfigManager
-from .command import config_handler
+from .manager import GroupConfig, GroupConfigManager, GetGroupConfig
+from . import command
 
 __plugin_meta__ = PluginMetadata(
     name="群聊配置",

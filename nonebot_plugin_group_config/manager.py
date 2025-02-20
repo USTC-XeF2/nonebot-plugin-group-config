@@ -1,3 +1,6 @@
+from nonebot.params import Depends
+from nonebot_plugin_uninfo import Uninfo
+
 from .utils import plugin_config, get_caller_plugin_name, ConfigFileWatcher, GLOBAL
 
 _enable_command = plugin_config.group_config_enable_command
@@ -49,11 +52,13 @@ class GroupConfigManager:
         return instance
 
     @classmethod
-    def get_manager(cls, scope: str):
+    def get_manager(cls, scope: str = None):
         """
         获取指定作用域的配置管理器
         """
-        return cls._managers[scope]
+        if scope is None:
+            scope = get_caller_plugin_name()
+        return cls._managers.get(scope)
 
     @classmethod
     def complete_config(cls, group_id: str):
@@ -94,3 +99,12 @@ class GroupConfigManager:
                 self.complete_config(group_id)
             self._configs[group_id] = GroupConfig(cls._watchers[group_id], self.scope)
         return self._configs[group_id]
+
+def GetGroupConfig(manager: GroupConfigManager):
+    """
+    通过依赖注入方式获取群聊配置对象
+    """
+    def _get(session: Uninfo):
+        if session.scene.is_group:
+            return manager.get_group_config(session.scene.id)
+    return Depends(_get)
