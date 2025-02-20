@@ -1,6 +1,6 @@
 [project]
 name = "nonebot_plugin_group_config"
-version = "0.2.0"
+version = "0.2.1"
 description = "Nonebot2 群聊配置信息存储与管理插件"
 readme = "README.md"
 dependencies = [

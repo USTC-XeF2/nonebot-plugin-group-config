@@ -54,9 +54,9 @@ class ConfigFileWatcher(FileSystemEventHandler):
         config_file = get_group_config_file(self.group_id)
         if not config_file.exists():
             self.config = {}
-
-        with config_file.open() as rf:
-            self.config = json.load(rf)
+        else:
+            with config_file.open() as rf:
+                self.config = json.load(rf)
 
     def save(self):
         with get_group_config_file(self.group_id).open("w") as wf:
