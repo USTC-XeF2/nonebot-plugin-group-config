@@ -29,7 +29,6 @@ class GroupConfig:
         config = self._watcher.config[self.scope]
         if key not in config:
             raise KeyError(f"Key {key!r} not in config")
-        super().__setitem__(key, value)
         if config[key] != value:
             config[key] = value
             self._watcher.save()
@@ -70,7 +69,8 @@ class GroupConfigManager:
             if manager.scope not in config:
                 config[manager.scope] = manager.default_config
             else:
-                config[manager.scope].update(manager.default_config)
+                for k, v in manager.default_config.items():
+                    config[manager.scope].setdefault(k, v)
         cls._watchers[group_id].save()
 
     @classmethod

@@ -33,7 +33,7 @@ async def _(session: Uninfo, args: Message = CommandArg()):
     if not (key := config_keys.get(parsed_args[0])):
         await config_handler.finish("无效的配置项", reply_message=True)
     manager = GroupConfigManager.get_manager(key[0])
-    group_config = manager.get_group_config(session.group_id)
+    group_config = manager.get_group_config(session.scene.id)
     old_value = group_config[key[1]]
     if len(parsed_args) == 1:
         await config_handler.finish(str(old_value), reply_message=True)

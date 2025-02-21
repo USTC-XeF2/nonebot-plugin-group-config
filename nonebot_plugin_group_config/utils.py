@@ -1,10 +1,10 @@
 import json
+import time
 import inspect
-from functools import lru_cache
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-from nonebot import get_plugin_config
+from nonebot import get_plugin_config, logger
 from nonebot.plugin import get_plugin_by_module_name
 from nonebot_plugin_localstore import get_plugin_config_dir
 
@@ -33,34 +33,39 @@ def get_caller_plugin_name():
 
     raise RuntimeError("Cannot get caller plugin")
 
-@lru_cache
 def get_group_config_file(group_id: str):
     return group_config_dir / plugin_config.group_config_format.format(group_id)
 
 class ConfigFileWatcher(FileSystemEventHandler):
+    _debounce = 0.05
+    _observer = Observer()
+    _observer.start()
     config: dict[str, dict[str]]
     def __init__(self, group_id: str):
-        self.group_id = group_id
-        self.on_modified(None)
-        self._observer = Observer()
-        self._observer.schedule(self, get_group_config_file(group_id))
-        self._observer.start()
-
-    def __del__(self):
-        self._observer.stop()
-        self._observer.join()
-
-    def on_modified(self, _):
-        config_file = get_group_config_file(self.group_id)
-        if not config_file.exists():
-            self.config = {}
-            self.save()
-        else:
-            with config_file.open() as rf:
+        self.config_file = get_group_config_file(group_id)
+        if self.config_file.exists():
+            with self.config_file.open() as rf:
                 self.config = json.load(rf)
+        else:
+            self.config = {}
+        self.last_modified = time.time()
+        self._observer.schedule(self, path=group_config_dir)
+
+    def on_modified(self, event):
+        if event.is_directory or not self.config_file.samefile(event.src_path):
+            return
+        current = time.time()
+        if current - self.last_modified < self._debounce:
+            return
+        self.last_modified = current
+        logger.info(f"reload config from {self.config_file.name}")
+        with self.config_file.open() as rf:
+            self.config = json.load(rf)
 
     def save(self):
-        with get_group_config_file(self.group_id).open("w") as wf:
+        self.last_modified = time.time()
+        logger.info(f"save config to {self.config_file.name}")
+        with self.config_file.open("w") as wf:
             json.dump(self.config, wf, indent=4)
 
 def is_command_enabled():
