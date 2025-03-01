@@ -56,7 +56,7 @@ pip install nonebot-plugin-group-config
 ```python
 from nonebot_plugin_group_config import GroupConfigManager, GLOBAL
 
-# 默认使用去除 nonebot_plugin_ 前缀的插件名称作为作用域
+# 默认使用去除 nonebot_plugin_ 前缀的插件名称作为作用域，在插件外调用时使用全局作用域
 config_manager = GroupConfigManager({
   "key1": "value1",
   "key2": 2
@@ -113,3 +113,4 @@ async def _(group_config: GroupConfig = GetGroupConfig(config_manager)):
 - [ ] 提前获取配置管理器与更好的全局管理器支持
 - [ ] 超级管理员私聊指令
 - [ ] 多级配置项支持
+- [ ] 列表配置项支持

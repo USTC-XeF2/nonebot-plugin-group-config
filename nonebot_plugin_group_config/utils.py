@@ -13,16 +13,18 @@ from .config import Config
 plugin_config = get_plugin_config(Config)
 group_config_dir = get_plugin_config_dir()
 
+GLOBAL = "GLOBAL"
+
 def get_caller_plugin_name():
     current_frame = inspect.currentframe()
     if current_frame is None:
-        raise RuntimeError("Cannot get current frame")
+        return GLOBAL
 
     frame = current_frame
     while frame := frame.f_back:
         module_name = (module := inspect.getmodule(frame)) and module.__name__
         if module_name is None:
-            raise RuntimeError("Cannot get module name")
+            return GLOBAL
 
         if module_name.split(".", maxsplit=1)[0] == "nonebot_plugin_group_config":
             continue
@@ -31,7 +33,7 @@ def get_caller_plugin_name():
         if plugin and plugin.id_ != "nonebot_plugin_group_config":
             return plugin.name.removeprefix("nonebot_plugin_")
 
-    raise RuntimeError("Cannot get caller plugin")
+    return GLOBAL
 
 def get_group_config_file(group_id: str):
     return group_config_dir / plugin_config.group_config_format.format(group_id)
@@ -52,15 +54,18 @@ class ConfigFileWatcher(FileSystemEventHandler):
         self._observer.schedule(self, path=group_config_dir)
 
     def on_modified(self, event):
-        if event.is_directory or not self.config_file.samefile(event.src_path):
-            return
-        current = time.time()
-        if current - self.last_modified < self._debounce:
-            return
-        self.last_modified = current
-        logger.info(f"reload config from {self.config_file.name}")
-        with self.config_file.open() as rf:
-            self.config = json.load(rf)
+        try:
+            if event.is_directory or not self.config_file.samefile(event.src_path):
+                return
+            current = time.time()
+            if current - self.last_modified < self._debounce:
+                return
+            self.last_modified = current
+            logger.info(f"reload config from {self.config_file.name}")
+            with self.config_file.open() as rf:
+                self.config = json.load(rf)
+        except:
+            pass
 
     def save(self):
         self.last_modified = time.time()
@@ -70,5 +75,3 @@ class ConfigFileWatcher(FileSystemEventHandler):
 
 def is_command_enabled():
     return plugin_config.group_config_enable_command is not False
-
-GLOBAL = "GLOBAL"
