@@ -71,7 +71,7 @@ class ConfigFileWatcher(FileSystemEventHandler):
         self.last_modified = time.time()
         logger.info(f"save config to {self.config_file.name}")
         with self.config_file.open("w") as wf:
-            json.dump(self.config, wf, indent=4)
+            json.dump(self.config, wf, ensure_ascii=False, indent=4)
 
 def is_command_enabled():
     return plugin_config.group_config_enable_command is not False
